@@ -1,0 +1,73 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+html{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body{
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 375px;
+    height: 877px;
+}
+
+.root{
+    width: inherit;
+    height: inherit;
+}
+
+header{
+    width: 100%;
+    height: 67px;
+    background-color: #C3CFD9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0px;
+    z-index: 1;
+}
+
+header h1{
+   color: #E8833A;
+   font-size: 34px;
+   font-weight: 400;
+}
+
+.content-container{
+
+    height: inherit;
+    width: 100%;
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    padding: 67px 10% 117px 10%;
+
+    overflow-y: scroll;
+}
+
+.content-container::-webkit-scrollbar{
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+span{
+
+    width: 100%;
+    min-height: 110px;
+    color: #293845;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: 0.04em;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

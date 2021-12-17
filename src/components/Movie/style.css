@@ -1,0 +1,39 @@
+
+span.data-e-hora{
+    color: #293845;
+
+    min-height: unset;
+    height: fit-content;
+    width: fit-content;
+
+    justify-content: unset;
+    align-items: unset;
+
+    font-size: 20px;
+    line-height: 23px;
+}
+
+.horarios{
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.horarios span{
+    width: 82px;
+    height: 43px;
+    min-height: unset;
+
+    color: #FFF;
+    font-size: 18px;
+
+    background: #E8833A;
+    border-radius: 3px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
