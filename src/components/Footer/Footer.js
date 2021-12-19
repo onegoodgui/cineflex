@@ -1,13 +1,16 @@
 import './style.css'
 import styled from 'styled-components'
 
-export function Footer({img, movieName, date, time}){
+export function Footer({img, movieName, date, time, bar}){
 
 
     return(
         <FooteR>
             <img src={img}></img>
-            <h1> {movieName} </h1>
+            <div className='sessionInfo'>
+                <h1> {movieName} </h1>
+                <h1>{date} {bar} {time}</h1>
+            </div>
         </FooteR> 
     )
 }
@@ -41,3 +44,10 @@ h1{
     margin-left: 14px;
 }
 `;
+
+const sessionInfo = styled.div`
+
+display: flex;
+flex-direction: column;
+
+`
