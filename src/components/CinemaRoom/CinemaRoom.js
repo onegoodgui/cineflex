@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 export let solicitacao = {};
 export let sessionInfo = [];
+export let seats = [];
 
 function CinemaRoom(){
 
@@ -17,7 +18,7 @@ function CinemaRoom(){
     let [selecionado,setSelecionado] = useState([]);
     const [nome,setNome] = useState('');
     const [CPF, setCPF] = useState('');
-    const [seatNumbers,setSeatNumbers] = useState([]);
+    const [seatIds,setSeatIds] = useState([]);
     let navigate = useNavigate();
     let array = [];
 
@@ -26,6 +27,7 @@ function CinemaRoom(){
 
     useEffect(() => {
         const requisicao = axios.get(`https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${sessionId}/seats`);
+        console.log(sessionId);
 
         requisicao.then(resposta =>{
             setSession(resposta.data);
@@ -40,24 +42,31 @@ function CinemaRoom(){
         )
     }
 
-    function changeStatus(index, isAvailable){
+    function changeStatus(index, seatNumber, isAvailable){
         if(isAvailable === true){
-            session.seats[index-1].isAvailable = 'selecionado';
+            session.seats[seatNumber-1].isAvailable = 'selecionado';
             setSelecionado(array);
             console.log(session.seats);
 
-            let indexArray = [...seatNumbers,index]
+            let indexArray = [...seatIds,index]
             
-            setSeatNumbers(indexArray);
-            console.log(seatNumbers)
+            setSeatIds(indexArray);
+            seats.push(seatNumber);
+
+            console.log(seats)
+            console.log(seatIds)
         }
         else if (isAvailable === 'selecionado'){
-            session.seats[index-1].isAvailable = true;
+            session.seats[seatNumber-1].isAvailable = true;
             setSelecionado(array);
 
-            let arrayIndex = seatNumbers.indexOf(index);
-            seatNumbers.splice(arrayIndex,1);
-            console.log(seatNumbers)
+            let arrayIndex = seatIds.indexOf(index);
+            seatIds.splice(arrayIndex,1);
+            arrayIndex = seats.indexOf(seatNumber);
+            seats.splice(arrayIndex);
+
+            console.log(seats)
+            console.log(seatIds)
         }
         else{
             alert('Esse assento não está disponível')
@@ -96,13 +105,14 @@ return(
 
                         {session.seats.map((seat) => {
 
-                            let numberIndex = seat.name;
+                            let numberIndex = seat.id;
+                            let seatNumber = seat.name;
                             selecionado.push(seat.isAvailable)
 
                             if(seat.name < 10 && selecionado.length <10){
                                 seat.name = `0${seat.name}`
                             }
-                            return(<Assento status={seat.isAvailable} key={seat.id} index={numberIndex} onClick={() => changeStatus(numberIndex,seat.isAvailable)}> {seat.name} </Assento>)})}
+                            return(<Assento status={seat.isAvailable} key={seat.id} index={numberIndex} onClick={() => changeStatus(numberIndex, seatNumber, seat.isAvailable)}> {seat.name} </Assento>)})}
 
                     </div>
                     <Legenda/>
@@ -112,7 +122,7 @@ return(
                         <span>CPF do comprador:</span>
                         <Info placeholder='Digite seu CPF...' onChange={e => setCPF(e.target.value)}></Info>
                     </PersonalInfo>
-                    <button onClick={() => SolicitarReserva(seatNumbers, nome, CPF,session)}> Reservar assento(s)</button>                
+                    <button onClick={() => SolicitarReserva(seatIds, nome, CPF,session)}> Reservar assento(s)</button>                
                 </div>
             </Content>
         <Footer img={session.movie.posterURL} movieName={session.movie.title} date={session.day.weekday} time={session.name} bar={' - '}/>

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {Topo} from "../Topo/Topo";
 import styled from 'styled-components';
-import { sessionInfo, solicitacao } from '../CinemaRoom/CinemaRoom';
+import { seats, sessionInfo, solicitacao } from '../CinemaRoom/CinemaRoom';
 
 
 
@@ -22,7 +22,7 @@ export default function Checkout(){
                 </Item>
                 <Item>
                     <span> Ingressos </span>
-                    {solicitacao.ids.map((id) => (<p key={id}>Assento {id}</p>))}
+                    {seats.map((seat) => (<p key={seat}>Assento {seat}</p>))}
                 </Item>
                 <Item>
                     <span> Comprador </span>
