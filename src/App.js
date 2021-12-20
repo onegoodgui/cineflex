@@ -1,7 +1,8 @@
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Checkout from './components/Checkout/Checkout';
+
+import Checkout from "./components/Checkout/Checkout";
 import CinemaRoom from './components/CinemaRoom/CinemaRoom'
 import Mainpage from './components/Mainpage/Mainpage'
 import Movie from './components/Movie/Movie'

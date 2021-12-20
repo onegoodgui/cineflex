@@ -1,10 +1,14 @@
 import './style.css';
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {Topo} from "../Topo/Topo";
 import {Footer} from "../Footer/Footer";
+import Checkout from '../Checkout/Checkout';
 import styled from 'styled-components';
+
+export let solicitacao = {};
+export let sessionInfo = [];
 
 function CinemaRoom(){
 
@@ -14,7 +18,10 @@ function CinemaRoom(){
     const [nome,setNome] = useState('');
     const [CPF, setCPF] = useState('');
     const [seatNumbers,setSeatNumbers] = useState([]);
+    let navigate = useNavigate();
     let array = [];
+
+
     
 
     useEffect(() => {
@@ -29,7 +36,8 @@ function CinemaRoom(){
         return (
             <>
                 Carregando
-            </>)
+            </>
+        )
     }
 
     function changeStatus(index, isAvailable){
@@ -43,7 +51,7 @@ function CinemaRoom(){
             setSeatNumbers(indexArray);
             console.log(seatNumbers)
         }
-        else{
+        else if (isAvailable === 'selecionado'){
             session.seats[index-1].isAvailable = true;
             setSelecionado(array);
 
@@ -51,12 +59,33 @@ function CinemaRoom(){
             seatNumbers.splice(arrayIndex,1);
             console.log(seatNumbers)
         }
+        else{
+            alert('Esse assento não está disponível')
+        }
+    }
+    
+    function SolicitarReserva(ids, name, cpf, session){
+        
+        solicitacao = {
+            ids: ids,
+            name: name,
+            cpf: cpf,
+        }
+        
+        sessionInfo = session;
+        solicitacao.ids.sort();
+    
+    
+        const requisicao = axios.post(`https://mock-api.driven.com.br/api/v4/cineflex/seats/book-many`,solicitacao);
+        requisicao.then((resposta) => {
+            console.log(resposta);
+            navigate('/sucesso');
+        })
+
     }
 
     array = session.seats.map((seat) => (seat.isAvailable));
-    // setSelecionado(array);
-    
-  
+
 return(
     <>
         <Topo/>
@@ -83,13 +112,14 @@ return(
                         <span>CPF do comprador:</span>
                         <Info placeholder='Digite seu CPF...' onChange={e => setCPF(e.target.value)}></Info>
                     </PersonalInfo>
-                    <Button> Reservar assento(s)</Button>                
+                    <button onClick={() => SolicitarReserva(seatNumbers, nome, CPF,session)}> Reservar assento(s)</button>                
                 </div>
             </Content>
         <Footer img={session.movie.posterURL} movieName={session.movie.title} date={session.day.weekday} time={session.name} bar={' - '}/>
     </>
-)
+    )
 }
+
 
 function Legenda(){
     return(
@@ -106,6 +136,18 @@ function Legenda(){
     </div>
     )
 }
+
+// function SolicitarReserva(ids, name, cpf, session){
+
+//     let solicitacao = {
+//         ids: ids,
+//         name: name,
+//         cpf: cpf,
+//     }
+
+//     console.log(solicitacao)
+    
+// }
 
 const Content = styled.div`
 
@@ -152,8 +194,6 @@ const Assento = styled.div`
     align-items: center;
 
     font-size: 11px;
-
-    pointer-events: ${props => props.status ? 'auto': 'none'};
     
     position: relative;
 
@@ -215,12 +255,12 @@ const Info = styled.input`
     }
 `
 
-const Button = styled.button`
+export const Button = styled.button`
 
 width: fit-content;
 height: 42px;
 
-margin-top: 155px;
+margin-top: 0px;
 padding: 0 45px;
 
 background: #E8833A;

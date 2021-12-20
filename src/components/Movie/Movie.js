@@ -53,10 +53,9 @@ function Data({days}){
                                         {day.showtimes.map((date) => (
                                             <>
                                                 <Link to={`/sessao/${date.id}`}>
-                                                <span key={date.id}>{date.name}</span>
-                                                {console.log(date.id)}
+                                                    <span key={date.id}>{date.name}</span>
+                                                    {console.log(date.id)}
                                                 </Link>
-
                                             </>
                                         ))}
                                     </div>
