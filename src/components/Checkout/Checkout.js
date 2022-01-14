@@ -1,14 +1,23 @@
 import './style.css';
 
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import {useNavigate } from "react-router-dom";
 import {Topo} from "../Topo/Topo";
 import styled from 'styled-components';
-import { seats, sessionInfo, solicitacao } from '../CinemaRoom/CinemaRoom';
+import { sessionInfo} from '../CinemaRoom/CinemaRoom';
 
 
 
-export default function Checkout(){
+export default function Checkout({nome, CPF, keys, setNome, setCPF, setSeatIds, setKeys}){
+
+    const navigate = useNavigate();
+
+    function handleGoHome(){
+        setNome(null);
+        setCPF(null);
+        setSeatIds([]);
+        setKeys([]);
+        navigate('/');
+    }
     
     return(
         <>
@@ -22,16 +31,17 @@ export default function Checkout(){
                 </Item>
                 <Item>
                     <span> Ingressos </span>
-                    {seats.map((seat) => (<p key={seat}>Assento {seat}</p>))}
+                    {keys.map((key) => (<p key={key}>Assento {key}</p>))}
                 </Item>
                 <Item>
                     <span> Comprador </span>
-                    <p> Nome: {solicitacao.name}</p>
-                    <p> CPF: {solicitacao.cpf}</p>
+                    <p> Nome: {nome}</p>
+                    <p> CPF: {CPF}</p>
                 </Item>
-                <Link to={`/`}>
-                    <button>Voltar pro Home</button>
-                </Link>
+                
+                    <Button onClick={handleGoHome}>Voltar pro Home</Button>
+
+
         </ContentContainer>
         </>
     )
@@ -88,4 +98,8 @@ const ContentContainer = styled.div`
     }
     
     
+    `
+
+    const Button = styled.button`
+    margin: 80px auto 0 auto;
     `

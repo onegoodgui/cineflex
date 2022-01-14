@@ -9,16 +9,12 @@ import styled from 'styled-components';
 
 export let solicitacao = {};
 export let sessionInfo = [];
-export let seats = [];
 
-function CinemaRoom(){
+function CinemaRoom({nome, CPF, seatIds, keys, setNome, setCPF, setSeatIds, setKeys}){
 
     const {sessionId} = useParams();
     const [session,setSession] = useState([]);
     let [selecionado,setSelecionado] = useState([]);
-    const [nome,setNome] = useState('');
-    const [CPF, setCPF] = useState('');
-    const [seatIds,setSeatIds] = useState([]);
     let navigate = useNavigate();
     let array = [];
 
@@ -48,13 +44,11 @@ function CinemaRoom(){
             setSelecionado(array);
             console.log(session.seats);
 
-            let indexArray = [...seatIds,index]
             
-            setSeatIds(indexArray);
-            seats.push(seatNumber);
+            setSeatIds([...seatIds, index]);
+            setKeys([...keys,seatNumber]);
 
-            console.log(seats)
-            console.log(seatIds)
+            console.log(keys)
         }
         else if (isAvailable === 'selecionado'){
             session.seats[seatNumber-1].isAvailable = true;
@@ -62,11 +56,9 @@ function CinemaRoom(){
 
             let arrayIndex = seatIds.indexOf(index);
             seatIds.splice(arrayIndex,1);
-            arrayIndex = seats.indexOf(seatNumber);
-            seats.splice(arrayIndex);
+            keys.splice(arrayIndex, 1);
 
-            console.log(seats)
-            console.log(seatIds)
+            console.log(keys)
         }
         else{
             alert('Esse assento não está disponível')
@@ -82,7 +74,7 @@ function CinemaRoom(){
         }
         
         sessionInfo = session;
-        solicitacao.ids.sort();
+        keys.sort();
     
     
         const requisicao = axios.post(`https://mock-api.driven.com.br/api/v4/cineflex/seats/book-many`,solicitacao);
@@ -103,7 +95,7 @@ return(
                     <span> Selecione o(s) assento(s)</span>
                     <div className='assentos'>
 
-                        {session.seats.map((seat) => {
+                        {session.seats.map((seat, index) => {
 
                             let numberIndex = seat.id;
                             let seatNumber = seat.name;
@@ -112,7 +104,7 @@ return(
                             if(seat.name < 10 && selecionado.length <10){
                                 seat.name = `0${seat.name}`
                             }
-                            return(<Assento status={seat.isAvailable} key={seat.id} index={numberIndex} onClick={() => changeStatus(numberIndex, seatNumber, seat.isAvailable)}> {seat.name} </Assento>)})}
+                            return(<Assento status={seat.isAvailable} key={index+1} index={numberIndex} onClick={() => changeStatus( numberIndex, seatNumber, seat.isAvailable)}> {seat.name} </Assento>)})}
 
                     </div>
                     <Legenda/>
@@ -146,18 +138,6 @@ function Legenda(){
     </div>
     )
 }
-
-// function SolicitarReserva(ids, name, cpf, session){
-
-//     let solicitacao = {
-//         ids: ids,
-//         name: name,
-//         cpf: cpf,
-//     }
-
-//     console.log(solicitacao)
-    
-// }
 
 const Content = styled.div`
 
